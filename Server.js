@@ -48,6 +48,25 @@ app.get('/laptopGalleryById/:npid',async(req,res) => {
     res.send({result:gallery});
 });
 
+app.get('/laptopSimilarLinks/:linkid',async(req,res) => {
+    let linkid =  req.params.linkid;
+    const links = await dbLaptop.getSimilarLinksBylinkId(linkid).then(async res=>{
+        return res.recordsets[0];
+    });
+
+    res.send({result:links});
+});
+
+app.get('/laptopSpecifications/:npid',async(req,res) => {
+    let npid = req.params.npid
+    const specs = await dbLaptop.getSpecifications(npid).then(async res =>{
+        return res.recordsets[0];
+    });
+
+    res.send({result:specs});
+});
+
+
 /* dbOperation.getQueryById(177).then(res=>{
     let query = res.recordset[0].queryStr;
     let data;

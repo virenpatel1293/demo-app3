@@ -7,7 +7,7 @@ import { useGesture } from "react-use-gesture";
 
 const ProductDeals= (props)=>{
     const [laptops, setLaptops] = useState([]);
-    
+    let crypto = require("crypto");
     const fetchData = async ()=>{
 
         const prods = await fetch('http://localhost:5000/byQueryId',{
@@ -31,13 +31,13 @@ const ProductDeals= (props)=>{
 
 
     return (
-       <Card>
+       <Card key={crypto.randomBytes(10).toString('hex')}>
             <Card.Header>
                 <h3>{props.DealTitle}</h3>
             </Card.Header>
             <Card.Body className="p-0 m-0">
-                <HorizontalScrollView className="overflow-scroll hide-scroll p-3">
-                    <ProductList data={laptops}></ProductList>
+                <HorizontalScrollView className="overflow-scroll hide-scroll p-3" key={crypto.randomBytes(10).toString('hex')}>
+                    <ProductList data={laptops} key={crypto.randomBytes(10).toString('hex')}></ProductList>
                 </HorizontalScrollView>
             </Card.Body>
         </Card>

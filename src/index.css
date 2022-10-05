@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -10,7 +11,9 @@ html {
 
 body {
   margin: 0;
-  background-color: #3f3f3f;
+  background-color: white;
+  font-family: 'Fredoka', sans-serif !important;
+  font-weight: normal;
 }
 
 .hide-scroll::-webkit-scrollbar {
@@ -29,4 +32,32 @@ body {
 
 .f-12{
   font-size: 12px;
+}
+
+.image-gallery-slide .image-gallery-image {
+	width: 100%;
+	object-fit: contain;
+	max-height: 400px !important;
+}
+
+.price-new {
+  font-size: 26px;
+  color: red ;
+  font-weight: 700;
+}
+
+.qty__text {
+  border-radius: 0px !important;
+  text-align: center;
+  padding: 4px !important;
+}
+.qty__plus {
+  border-radius: 0px 19px 19px 0px !important;
+  padding: 0px 11px 3px 11px !important;
+  font-weight: 600;
+}
+.qty__minus {
+  border-radius: 19px 0px 0px 19px !important;
+  padding: 0px 11px 3px 14px !important;
+  font-weight: 600;
 }
