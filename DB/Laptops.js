@@ -45,9 +45,44 @@ const getSpecifications = async(npid) => {
     }
 }
 
+const getReviews = async(npid,linkId,status) =>{
+    try{
+        let pool = await sql.connect(config);
+        let reviews = pool.request().query(`exec Get_Product_Reviews_LinkID ${npid},${linkId},${status}`);
+        return reviews;
+    }
+    catch(e){
+        console.log(e)
+    }
+}   
+
+const getBundles = async(npid)=>{
+    try{
+        let pool = await sql.connect(config);
+        let bundles = pool.request().query(`exec Get_nPRO_Bundles ${npid}`);
+        return bundles;
+    }catch(e){
+        console.log(e);
+    }
+}
+
+const getLaptopBundles = async(npid) => {
+    try{
+        let pool = await sql.connect(config);   
+        let laptopBundles = pool.request().query(`exec Get_Config_Laptop_Info_From_Components`);
+        return laptopBundles;
+    }
+    catch(e){
+        console.log(e);
+    }
+}
+
 module.exports = {
     getLaptopById,
     getLaptopGalleryById,
     getSimilarLinksBylinkId,
-    getSpecifications
+    getSpecifications,
+    getReviews,
+    getBundles,
+    getLaptopBundles
 }

@@ -25,6 +25,8 @@ const Laptop = () => {
     const [similarLinks, setSimilarLinks] = useState([]);
     const [brand, setBrand] = useState('');
     const [specification, setSpecification] = useState(null);
+    const [reviews, setReviews] = useState(null);
+    const [bundles,setBundles] = useState(null);
 
     /* Modals */
     const [askQuestionShow, setAskQuestionShow] = useState(false);
@@ -49,7 +51,6 @@ const Laptop = () => {
             let galleryImages=[];
 
             const getGallery = async (imgUrl)=>{
-                console.log(imgUrl);
                 const prods = await fetch(`http://localhost:5000/laptopGalleryById/${ProductId}`,{
                     method:'GET',
                     headers:{
@@ -144,6 +145,47 @@ const Laptop = () => {
                Getting Specificaitons Method
              */
 
+            const getReviews= async(npid,linkId,rstatus)=>{
+                const reviewsData = await fetch(`http://localhost:5000/laptopReviews/${npid}/${linkId}/${rstatus}`,{
+                    method:'GET',
+                    headers:{
+                        'Content-Type':'application/json',
+                        'Accept':'application/json'
+                    }
+                }).then(res=>res.json());
+
+                let reviewsAll =reviewsData.result;   
+                setReviews(prevReviews => {
+                    prevReviews = reviewsAll;
+                    return prevReviews;
+                });
+            }
+
+            /* 
+               Getting Reviews Method
+             */
+
+            const getBundles = async(npid)=>{
+                const bundleData = await fetch(`http://localhost:5000/laptopBundles/${npid}`,{
+                   method:'GET',
+                   headers:{
+                        'Content-Type':'application/json',
+                        'Accept':'application/json'                        
+                   }     
+                }).then(res=>res.json());
+
+                let bundlesAll = bundleData.result;
+                /* console.log("BundleData",bundlesAll); */
+                setBundles(prevBundle =>{
+                    prevBundle = bundlesAll;
+                    return prevBundle;
+                })
+            }
+
+            /* 
+               Getting Bundles Method
+            */
+
             const fetchData = async ()=>{
                 const prods = await fetch(`http://localhost:5000/laptopById/${ProductId}`,{
                     method:'GET',
@@ -208,6 +250,8 @@ const Laptop = () => {
                 getGallery(product.ManuUrl);
                 getSimilarLinks(product.IsFeatured);
                 getSpecification(ProductId);
+                getReviews(ProductId,product.IsFeatured,4);
+                getBundles(ProductId);
                 /* Methods */
             }    
 
@@ -274,12 +318,12 @@ const Laptop = () => {
                             <RenderHigh high={laptop.high} />
                         </Row>
                         <Row>
-                            <Col className="d-inline-flex justify-content-center">
+                            <Col className="d-inline-flex justify-content-center mt-1 mb-1">
                                 <Button className="btn btn-light border-dark w-100" >
                                    <FcLike/> Add To Wishlist
                                 </Button>
                             </Col>
-                            <Col  className="d-inline-flex justify-content-center">
+                            <Col  className="d-inline-flex justify-content-center  mt-1 mb-1">
                                 <Button className="btn btn-light  border-dark  w-100" onClick={() => setAskQuestionShow(true)}>
                                   <FcQuestions/> Ask a Question?
                                 </Button>
@@ -289,7 +333,7 @@ const Laptop = () => {
                                     onHide={() => setAskQuestionShow(false)}
                                 />
                             </Col>
-                            <Col  className="d-inline-flex justify-content-center">
+                            <Col  className="d-inline-flex justify-content-center  mt-1 mb-1">
                                 <Button className="btn btn-light  border-dark  w-100" onClick={() => setTellFriendShow(true)}>
                                     <FcShare/> Tell a Friend
                                 </Button>
@@ -299,7 +343,7 @@ const Laptop = () => {
                                     onHide={() => setTellFriendShow(false)}
                                 />
                             </Col>
-                            <Col  className="d-inline-flex justify-content-center">
+                            <Col  className="d-inline-flex justify-content-center  mt-1 mb-1">
                                 <Button className="btn btn-light  border-dark  w-100" >
                                     <FcCurrencyExchange/> Price Match
                                 </Button>
@@ -335,22 +379,28 @@ const Laptop = () => {
                     </Col>
                 </Row>
                 <Row>
+                {/* Product Information Tabs */}    
                 <Col md={10} sm={12} xs={12}>
                     <Tabs defaultActiveKey="description" id="justify-tab-example" className="mb-3" justify>
                         <Tab eventKey="description" title="Description" >
-                            <RenderHTML  HTML={laptop.DynamicOverview} />
+                            <div className="container-fluid overflow-hidden">
+                                <RenderHTML  HTML={laptop.DynamicOverview} />
+                            </div>
                         </Tab>
                         <Tab eventKey="specification" title="Specification">
-                            <LaptopSpec Specs={specification}/>
+                            <div className="container-fluid overflow-hidden">
+                                <LaptopSpec Specs={specification}/>
+                            </div>
                         </Tab>
                         <Tab eventKey="essential-extras" title="Essential Extras">
-                            <LaptopBundles ProductId={ProductId}/>
+                            <LaptopBundles ProductId={ProductId} Bundles={bundles}/>
                         </Tab>
                         <Tab eventKey="reviews" title="Reviews">
-                            <LaptopReviews  ProductId={ProductId}/>
+                            <LaptopReviews  ProductId={ProductId} Reviews={reviews} />
                         </Tab>
                     </Tabs>
                 </Col>
+                {/* Product Information Tabs */}    
                 <Col md={2} sm={12} xs={12}>
                     <LaptopLinks links={similarLinks} brand={brand} />
                 </Col>

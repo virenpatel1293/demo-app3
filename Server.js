@@ -66,6 +66,39 @@ app.get('/laptopSpecifications/:npid',async(req,res) => {
     res.send({result:specs});
 });
 
+app.get('/laptopReviews/:npid/:linkid/:status',async(req,res) => {
+    let npid = req.params.npid;
+    let linkid = req.params.linkid;
+    let status = req.params.status;
+
+    const reviews = await dbLaptop.getReviews(npid,linkid,status).then(async res=>{
+        return res.recordsets[0];
+    });
+
+    res.send({result:reviews});
+});
+
+app.get('/laptopBundles/:npid',async(req,res)=>{
+    let npid= req.params.npid;
+
+    const bundles = await dbLaptop.getBundles(npid).then(async res=>{
+        const bundleData = res.recordsets[0];
+
+        const laptopBundles =await dbLaptop.getLaptopBundles().then(async res=>{
+            return res.recordsets[0];
+        });
+
+        /* return [...bundleData, ...laptopBundles];   */
+
+        if(laptopBundles)
+            return [bundleData, laptopBundles];    
+        else
+            return bundleData;
+    });
+
+    res.send({result:bundles});
+});
+
 
 /* dbOperation.getQueryById(177).then(res=>{
     let query = res.recordset[0].queryStr;

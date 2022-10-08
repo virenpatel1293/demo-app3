@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, ListGroup } from "react-bootstrap";
+import { Badge, Col, ListGroup } from "react-bootstrap";
 
 const LaptopSpecDetails = (props) =>{
     const specDetails = props.SpecDetails;
@@ -10,21 +10,21 @@ const LaptopSpecDetails = (props) =>{
         details = specDetails.map((sDetails,ind)=>{
           return  <ListGroup.Item
                 as="li"
-                className="d-flex justify-content-between align-items-start"
+                className="d-flex justify-content-between align-items-start p-1 border-0" 
                 key={ind}
             >
-                <div className="ms-2 me-auto">
-                    <div className="fw-bold">{sDetails.SpecDetail}</div>
-                </div>
-                <h6 bg="primary">
-                {sDetails.Opt}
-                </h6>
+                <Col className="ms-2" md={4} sm={6}>
+                    <h6 className="">{sDetails.SpecDetail}</h6>
+                </Col>
+                <Col md={8} sm={6} className="text-left p-0" bg="primary">
+                    {sDetails.Opt}
+                </Col>
             </ListGroup.Item>
         });
     }
 
     return (
-        <ListGroup as="ol" numbered>
+        <ListGroup as="ol" >
             {details}
         </ListGroup>
     );

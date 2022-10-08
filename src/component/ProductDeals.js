@@ -21,7 +21,6 @@ const ProductDeals= (props)=>{
             })
         })
         .then(res=>res.json());
-        console.log(prods);
         setLaptops(prods.result);
     }
 
