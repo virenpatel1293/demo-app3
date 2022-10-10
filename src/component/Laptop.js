@@ -10,6 +10,7 @@ import LaptopSpec from "./LaptopSpec";
 import {FcCurrencyExchange, FcLike, FcQuestions, FcShare} from 'react-icons/fc';
 import AskQuestion from "./Modals/AskQuestion";
 import TellFriend from "./Modals/TellFriend";
+var _ = require("lodash");
 
 const Laptop = () => {
     const params= useParams();
@@ -31,6 +32,7 @@ const Laptop = () => {
     /* Modals */
     const [askQuestionShow, setAskQuestionShow] = useState(false);
     const [tellFriendShow, setTellFriendShow] = useState(false);
+    const [selectedBundleItems, setSelecetecBundleItems] = useState([]);
 
     let ProductId = 0;
     let highlights = null;
@@ -257,7 +259,7 @@ const Laptop = () => {
 
             fetchData();
         }
-    },[])
+    },[ProductId])
 
     const RenderHTML = (props) => (<span dangerouslySetInnerHTML={{__html:props.HTML}}></span>)
 
@@ -285,6 +287,18 @@ const Laptop = () => {
     const notifyMe = () => {
         console.log("Notify Me Click");
     }
+
+    /* Bundle Item Selection */
+    const bundleItemsSeleceted = bundleItem => {
+        setSelecetecBundleItems((prevBundleItems) => {
+            let nBundleId = bundleItem.BundleId;
+            prevBundleItems = _.filter(prevBundleItems,item => item.BundleId != nBundleId);
+            let selecetedBundles =  [...prevBundleItems,bundleItem];
+            return selecetedBundles;
+        });
+        
+    }
+    /* Bundle Item Selection */
     
     return (
         <Container fluid>
@@ -393,7 +407,7 @@ const Laptop = () => {
                             </div>
                         </Tab>
                         <Tab eventKey="essential-extras" title="Essential Extras">
-                            <LaptopBundles ProductId={ProductId} Bundles={bundles}/>
+                            <LaptopBundles ProductId={ProductId} Bundles={bundles} onBundleItemsSeleceted={bundleItemsSeleceted} selecetedItems={selectedBundleItems}/>
                         </Tab>
                         <Tab eventKey="reviews" title="Reviews">
                             <LaptopReviews  ProductId={ProductId} Reviews={reviews} />
@@ -402,7 +416,7 @@ const Laptop = () => {
                 </Col>
                 {/* Product Information Tabs */}    
                 <Col md={2} sm={12} xs={12}>
-                    <LaptopLinks links={similarLinks} brand={brand} />
+                    <LaptopLinks links={similarLinks} brand={brand} ProductId={ProductId} />
                 </Col>
                 </Row>
             </div>

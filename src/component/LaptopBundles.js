@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import { FcCollapse, FcExpand } from "react-icons/fc";
+import Bundle from "./Bundle";
 var _ = require("lodash");
 
 const LaptopBundles = (props) =>{
@@ -57,6 +59,11 @@ const LaptopBundles = (props) =>{
     }];
     let finalBundles=null;
     let crypto = require("crypto");
+   
+    const selectBundleItem = bundleItem =>{
+        console.log(bundleItem);
+        props.onBundleItemsSeleceted(bundleItem);
+    };
 
     if(bundles)
     {
@@ -85,6 +92,7 @@ const LaptopBundles = (props) =>{
                 bundle["ImageId"] = fbundle.ImageID;
                 bundle["ProductId"] = fbundle.nPid;
                 bundle["IsDefault"] = price > 0 ? 0:1;
+                bundle["IsSelected"] = parseInt(bundle["IsDefault"]) ? 1 : 0;
                 maxPrice = maxPrice < price ? price:maxPrice;
                 bundle["Status"] = fbundle.Status;
                 return bundle;
@@ -113,7 +121,7 @@ const LaptopBundles = (props) =>{
                 ],item => item.length > 0)
                 ,(fbundles)=>{
                 let bundleID=0;
-                const ffBundles = fbundles.map((fbundle) => {
+                const ffBundles = fbundles.map((fbundle,ind) => {
                     let bundle = {};
                     bundle["BundleID"] = fbundle.BundleID;
                     bundleID = fbundle.BundleID;
@@ -124,6 +132,7 @@ const LaptopBundles = (props) =>{
                     bundle["ImageId"] = fbundle.ImageID;
                     bundle["ProductId"] = fbundle.productid;
                     bundle["IsDefault"] = 0;
+                    bundle["IsSelected"] = 0;
                     bundle["Status"] = 1;
                     return bundle;
                 });
@@ -139,47 +148,17 @@ const LaptopBundles = (props) =>{
 
         bundlesSet=_.filter(bundlesSet, set => set.Bundles !== null);
 
-        const setBundles = (setBundles) =>{
-            return setBundles.map((bundle) => {
-                return <div className="col-2 col-md-3 col-sm-6 p-2"  key={crypto.randomBytes(5).toString('hex')}>
-                            <Card>
-                                <Card.Body>
-                                    <Row className="d-inline-flex">
-                                        <Col md={4}>
-                                            <img src={bundle.ImageUrl} className="img-fluid"></img>
-                                        </Col>
-                                        <Col md={8}>
-                                            <h6>{bundle.Title}</h6>
-                                            <h5>R {bundle.Price}</h5>
-                                        </Col>
-                                    </Row>
-                                </Card.Body>
-                            </Card>
-                        </div>
-             });   
-             
+        const clickBundleHead = (e) =>{
+             console.log(e);   
         }
 
         finalBundles = bundlesSet.map((bundle,ind) => {
-            return <details  key={crypto.randomBytes(4).toString('hex')}>
-                        <summary>
-                            <Row className="d-flex">
-                                <Col>
-                                    {bundle.BundleTitle}
-                                </Col>
-                                <Col>
-                                    {bundle.SelectedOption}
-                                </Col>
-                            </Row>
-                        </summary>
-                        <div className="d-flex flex-wrap">
-                            {setBundles(bundle.Bundles)}
-                        </div>
-                    </details>;
+            return <Bundle bundle={bundle} key={crypto.randomBytes(4).toString('hex')} isOpen={true} onBundleSelection={selectBundleItem} selectedBundleItems={props.selecetedItems}/>
         });
 
     }
 
+    
 
     return (
         <div id="bundlesDiv">
