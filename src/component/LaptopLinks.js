@@ -1,16 +1,20 @@
 import React from "react";
 import { Button, Card, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+var _ = require("lodash");
 
 const LaptopLinks = (props) =>{
     const links = props.links;
     const brand = props.brand;
     const actProductId = props.ProductId;
+    const urlTitle = props.UrlTitle;
     const navigate = useNavigate();
     let linksData=null;
 
     const btnLinkClick = (pid) => {
-        navigate(`/details/${pid}`);
+        /* navigate(`/details/${pid}`); */
+        console.log(`/${_.toLower(urlTitle).replace(" ","-").trim()}/laptops-for-sale/${pid}`);
+        navigate(`/${_.replace(_.toLower(urlTitle),new RegExp(" ","g"),"-").trim()}/laptops-for-sale/${pid}`);
     }
 
     if(links.length > 0)

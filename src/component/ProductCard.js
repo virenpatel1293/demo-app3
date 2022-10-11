@@ -2,14 +2,17 @@ import React from "react";
 import { Badge, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ProductHeighlights from "./ProductHeighlights";
+var _ = require("lodash");
 
 const ProductCard= (props)=>{
     const navigate = useNavigate();
     let crypto = require("crypto");
     const moreInfoClick = (product) =>{
         if(parseInt(product.product_type) === 3)
-            navigate(`/Details/${product.product_id}`);
+            navigate(`/${_.replace(_.toLower(product.product_url),new RegExp(" ","g"),"-").trim()}/laptops-for-sale/${product.product_id}`);
     }
+
+    console.log(props.product);
 
     return (
         <Card style={{ width: '18rem' }} key={crypto.randomBytes(10).toString('hex')}>

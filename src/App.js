@@ -16,6 +16,7 @@ function App() {
       <Route path="/" element={ <Default/> } />
       <Route path="/AddUser" element={ <AddUser/> } />
       <Route path="/Details/:ProductId" element={ <Laptop/> } />
+      <Route path="/:UrlTitle/laptops-for-sale/:ProductId" element={ <Laptop/> } />
       <Route path="/Gallery" element={ <MyGallery/> } />
     </Routes>
   );

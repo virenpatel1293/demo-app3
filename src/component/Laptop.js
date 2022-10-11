@@ -25,6 +25,7 @@ const Laptop = () => {
     const [cartElements,setCartElements] = useState(null);
     const [similarLinks, setSimilarLinks] = useState([]);
     const [brand, setBrand] = useState('');
+    const [urlTitle, setUrlTitle] = useState('');
     const [specification, setSpecification] = useState(null);
     const [reviews, setReviews] = useState(null);
     const [bundles,setBundles] = useState(null);
@@ -117,10 +118,6 @@ const Laptop = () => {
                 setSimilarLinks(prevLink =>{
                     prevLink = links;
                     return prevLink
-                });
-                setBrand(prevBrand=>{
-                    prevBrand = laptop.Brand;
-                    return prevBrand;
                 });
             }
 
@@ -246,7 +243,8 @@ const Laptop = () => {
                 });
                 
                 /* Page Work */
-                
+                setBrand(product.Brand);
+                setUrlTitle(product.Url);
                 /* Page Work */
 
 
@@ -303,6 +301,7 @@ const Laptop = () => {
         
     }
     /* Bundle Item Selection */
+  
     
     return (
         <Container fluid>
@@ -428,7 +427,7 @@ const Laptop = () => {
                 </Col>
                 {/* Product Information Tabs */}    
                 <Col md={2} sm={12} xs={12}>
-                    <LaptopLinks links={similarLinks} brand={brand} ProductId={ProductId} />
+                    <LaptopLinks links={similarLinks} brand={brand} ProductId={ProductId} UrlTitle={urlTitle} />
                 </Col>
                 </Row>
             </div>
