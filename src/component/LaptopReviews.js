@@ -1,9 +1,9 @@
 import React from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 
 
 const LaptopReviews = (props) =>{
-    const ProductID = props.ProductId;
+    /* const ProductID = props.ProductId; */
     const reviews = props.Reviews;
     let reviewData = null;
 

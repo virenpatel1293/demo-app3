@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Container, Image, NavItem, Row, Tab, Tabs } from "react-bootstrap";
+import { Badge, Button, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import QtyBox from "../UI/QtyBox";
 import LaptopBundles from "./LaptopBundles";
@@ -20,14 +20,15 @@ const Laptop = () => {
     const [laptop, setLaptop] = useState({});
     const [stockBg, setStockBg] = useState('success');
     const [stockStatus, setStockStatus] = useState('In Stock');
-    const [adCart,setAdCart] = useState(true);
-    const [divNotify,setDivNotify] = useState(false);
+    /* const [adCart,setAdCart] = useState(true);
+    const [divNotify,setDivNotify] = useState(false); */
     const [cartElements,setCartElements] = useState(null);
     const [similarLinks, setSimilarLinks] = useState([]);
     const [brand, setBrand] = useState('');
     const [specification, setSpecification] = useState(null);
     const [reviews, setReviews] = useState(null);
     const [bundles,setBundles] = useState(null);
+    const [totalPrice,setTotalPrice] = useState(0);
 
     /* Modals */
     const [askQuestionShow, setAskQuestionShow] = useState(false);
@@ -35,7 +36,6 @@ const Laptop = () => {
     const [selectedBundleItems, setSelecetecBundleItems] = useState([]);
 
     let ProductId = 0;
-    let highlights = null;
     ProductId = parseInt(params.ProductId);
     const [gallery,setGallery] = useState({});
     const [galleryData, setGalleryData] = useState([
@@ -72,10 +72,10 @@ const Laptop = () => {
                         let images = gall.ImageGallery.split("|").map(image => {
                             return `https://www.evetech.co.za/${image}`;
                         });
-                        let imageThumb = gall.ImageGalleryThumb.split("|").map(image => {
+                        /* let imageThumb = gall.ImageGalleryThumb.split("|").map(image => {
                             return `https://www.evetech.co.za/${image}`;
-                        });
-
+                            });
+                        */
                         
                         galleryImages.push({
                             original:  imgUrl,
@@ -200,13 +200,20 @@ const Laptop = () => {
                 let product = prods.result[0];
 
                 setLaptop(prods.result[0]);
+                setTotalPrice(prevPrice=>{
+                    let upPrice =0;
+                    if(selectedBundleItems != null){
+                        upPrice = _.sumBy(selectedBundleItems, function(o) { return o.Price; });
+                    }
+                    return prods.result[0].Price + upPrice;
+                });
                 setStockStatus(prevStat=> {
                     let status= product.StockStatus.toLowerCase();
 
                     if(status.includes("out of stock") || status.includes("pre-order") || status.includes("coming soon") || status.includes("notify me") || status.includes("coming soon / pre-order") || status.includes("product discontinued") || status.includes("stock to be confirm"))
                     {
-                        setAdCart(false);
-                        setDivNotify(true);
+                        /* setAdCart(false);
+                        setDivNotify(true); */
                         if(status.includes("out of stock") || status.includes("pre-order"))
                         {
                             setStockBg("danger");   
@@ -220,8 +227,8 @@ const Laptop = () => {
                         );
                     }
                     else{
-                        setAdCart(true);
-                        setDivNotify(false);
+                       /*  setAdCart(true);
+                        setDivNotify(false); */
                         setCartElements(
                             <div>
                                  <Row className="pe-2 ps-2 pt-1 pb-1">
@@ -239,12 +246,7 @@ const Laptop = () => {
                 });
                 
                 /* Page Work */
-                if(product.high)
-                {
-                    highlights = product.high.split("|").map((highlight) => {
-                        return <Col className="m-0" style={{fontSize:'12px', padding:'5px'}} key={crypto.randomBytes(10).toString('hex')} dangerouslySetInnerHTML={{ __html: highlight }} />
-                    });
-                }
+                
                 /* Page Work */
 
 
@@ -294,6 +296,8 @@ const Laptop = () => {
             let nBundleId = bundleItem.BundleId;
             prevBundleItems = _.filter(prevBundleItems,item => item.BundleId != nBundleId);
             let selecetedBundles =  [...prevBundleItems,bundleItem];
+            let price = _.sumBy(selecetedBundles, function(o) { return o.Price; });
+            setTotalPrice(laptop.Price + price);
             return selecetedBundles;
         });
         
@@ -407,6 +411,14 @@ const Laptop = () => {
                             </div>
                         </Tab>
                         <Tab eventKey="essential-extras" title="Essential Extras">
+                            <Row className="pe-1 ps-1">
+                                <Col className="text-left ">
+                                    <h5 className="pe-1 ps-1">Buy these items together and save even more!</h5>
+                                </Col>
+                                <Col className="text-right">
+                                    <h6 className="pe-1 ps-1">Current Price: <span className="price-new">{currencyFormat(totalPrice)}</span></h6>
+                                </Col>
+                            </Row>
                             <LaptopBundles ProductId={ProductId} Bundles={bundles} onBundleItemsSeleceted={bundleItemsSeleceted} selecetedItems={selectedBundleItems}/>
                         </Tab>
                         <Tab eventKey="reviews" title="Reviews">

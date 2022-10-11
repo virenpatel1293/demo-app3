@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge, Col, ListGroup } from "react-bootstrap";
+import { Col, ListGroup } from "react-bootstrap";
 
 const LaptopSpecDetails = (props) =>{
     const specDetails = props.SpecDetails;

@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
-import { FcCollapse, FcExpand } from "react-icons/fc";
+import React from "react";
 import Bundle from "./Bundle";
 var _ = require("lodash");
 
@@ -14,48 +12,56 @@ const LaptopBundles = (props) =>{
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"https://www.evetech.co.za/repository/config/microsoft-2022-v1.jpg", 
     },{
         "BundleID": 2,
         "BundleTitle":"Antivirus::",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"",
     },{
         "BundleID": 5,
         "BundleTitle":"Carry BAG:: ",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"",
     },{
         "BundleID": 3,
         "BundleTitle":"External HDD:: ",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"https://www.evetech.co.za/repository/config/External-hdd-01.jpg",
     },{
         "BundleID": 4,
         "BundleTitle":"Mouse:: ",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"https://www.evetech.co.za/repository/config/Mouse1.jpg",
     },{
         "BundleID": 6,
         "BundleTitle":"Headphones:: ",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"https://www.evetech.co.za/repository/config/Headset.jpg",
     },{
         "BundleID": 7,
         "BundleTitle":"Speakers:: ",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"https://www.evetech.co.za/repository/ProductImages/speakers-generic-300px-v01.jpg",
     },{
         "BundleID": 8,
         "BundleTitle":"Monitors:: ",
         "Bundles":null,
         "SelectedOption":null,
         "OptionPrice":0,
+        "DefaultImage":"https://www.evetech.co.za/repository/ProductImages/Monitor-300px-v01.jpg",
     }];
     let finalBundles=null;
     let crypto = require("crypto");
@@ -148,9 +154,28 @@ const LaptopBundles = (props) =>{
 
         bundlesSet=_.filter(bundlesSet, set => set.Bundles !== null);
 
-        const clickBundleHead = (e) =>{
-             console.log(e);   
-        }
+        bundlesSet = _.map(bundlesSet,(bundleSet)=>{
+            
+            /* filter bundle for default */
+            let defaultItem = _.filter(bundleSet.Bundles, item=>item.IsDefault === 1);
+            if(defaultItem.length === 0)
+            {
+               bundleSet.Bundles = [{
+                    "BundleID": bundleSet.BundleID,
+                    "Title": "Not Included",
+                    "Price": bundleSet.OptionPrice,
+                    "ImageUrl": bundleSet.DefaultImage,
+                    "GalleryId": 0,
+                    "ImageId": 0,
+                    "ProductId": 0,
+                    "IsDefault": 1,
+                    "IsSelected": 1,
+                    "Status": 1,
+               }, ...bundleSet.Bundles];
+            }
+            
+            return bundleSet;
+        });
 
         finalBundles = bundlesSet.map((bundle,ind) => {
             return <Bundle bundle={bundle} key={crypto.randomBytes(4).toString('hex')} isOpen={true} onBundleSelection={selectBundleItem} selectedBundleItems={props.selecetedItems}/>
@@ -158,7 +183,6 @@ const LaptopBundles = (props) =>{
 
     }
 
-    
 
     return (
         <div id="bundlesDiv">

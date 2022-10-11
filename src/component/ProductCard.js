@@ -7,7 +7,7 @@ const ProductCard= (props)=>{
     const navigate = useNavigate();
     let crypto = require("crypto");
     const moreInfoClick = (product) =>{
-        if(product.product_type == 3)
+        if(parseInt(product.product_type) === 3)
             navigate(`/Details/${product.product_id}`);
     }
 

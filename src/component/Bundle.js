@@ -62,7 +62,7 @@ const Bundle = (props) =>{
             <summary className="d-flex row p-2 me-2 ms-2" onClick={clickToggle}  style={{border:"1px  solid gray", borderRadius:"10px"}}>
                 <Row className="d-flex">
                     <Col>
-                        {bundle.BundleTitle} {bundle.SelectedOption = _.first(_.filter(bundle.Bundles.map(
+                        <b>{bundle.BundleTitle}</b> {bundle.SelectedOption = _.first(_.filter(bundle.Bundles.map(
                                     ( bundle) => {
                                         return (props.selectedBundleItems != null) ?
                                         (_.filter(props.selectedBundleItems, item => item.BundleId === bundle.BundleID && item.Title === stripHtml(bundle.Title)).length > 0 ? stripHtml(bundle.Title) : (bundle.IsDefault === 1  && _.filter(props.selectedBundleItems,item=>item.BundleId === bundle.BundleID).length === 0 ? stripHtml(bundle.Title) : "" ))
